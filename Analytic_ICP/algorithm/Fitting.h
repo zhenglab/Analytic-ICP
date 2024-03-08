@@ -861,8 +861,8 @@ void  __declspec(dllexport) ADMMFitting(T(*mat_set)[MAXD], int deg
 	, T(*point0)[3], T(*point)[3], int point_num, double eps, int jt)
 {
 	typedef T Td[MAXD];
-	Td *delta_set = new Td[MAXD];
-	memset(delta_set, 0, sizeof(Td)*MAXD);
+	Td *delta_set = new Td[MAXDEGREE];
+	memset(delta_set, 0, sizeof(Td)*MAXDEGREE);
 	T error,tempE;
 	for (int i = 0; i != jt; ++i)
 	{

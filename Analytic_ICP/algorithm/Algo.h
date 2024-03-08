@@ -18,7 +18,7 @@
 #define MAXITERCOUNT 10
 #define PI 3.14159265358979323846264338327950288419716939937510
 #define MAXD 8
-#define MAXDEGREE 16
+#define MAXPARANUM 16
 typedef double coefmat[MAXD];
 typedef double double2[2];
 typedef double double3[3];

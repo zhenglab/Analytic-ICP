@@ -2,7 +2,7 @@
 /*!
 *      \file Algo.h
 *      \brief algorithm
-*	   \author Wei Feng
+*      \author Wei Feng
 *      \date 09/16/2020
 */
 #ifndef MATHEMATICAL
@@ -17,6 +17,7 @@
 
 #define MAXITERCOUNT 10
 #define PI 3.14159265358979323846264338327950288419716939937510
+#define MAXNOMIALSIZE 64
 #define MAXD 8
 #define MAXDEGREE 16
 typedef double coefmat[MAXD];

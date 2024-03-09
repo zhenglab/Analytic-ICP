@@ -2,7 +2,7 @@
 /*!
 *      \file Algo.h
 *      \brief algorithm
-*	   \author Wei Feng
+*      \author Wei Feng
 *      \date 09/16/2020
 */
 #ifndef MATHEMATICAL

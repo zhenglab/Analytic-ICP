@@ -426,7 +426,7 @@ void  __declspec(dllexport) GetL4AffineQR(T l[], T(&ortMat)[9]
 }
 
 template<class T>
-void  __declspec(dllexport) GetL4Analytic(T l[], T(*mat_set)[MAXD], int deg
+void  __declspec(dllexport) GetL4Analytic(T l[], T(*mat_set)[MAXMATSIZE], int deg
 	, T(*point0)[3], T(*point)[3], int point_num)
 {
 	memset(l, 0, sizeof(T)*point_num * 2);
@@ -610,7 +610,7 @@ void  __declspec(dllexport) GetDeltaVec4AffineQR(T DeltaV[], T(&ortMat)[9], T pa
 }
 
 template<class T>
-T  __declspec(dllexport) GetDeltaVec4ADMM(T(&delta)[MAXD], T(*mat_set)[MAXD]
+T  __declspec(dllexport) GetDeltaVec4ADMM(T(&delta)[MAXMATSIZE], T(*mat_set)[MAXMATSIZE]
 	, int deg, T(*point0)[3], T(*point)[3], int point_num)
 {
 	int sn = 2 * (deg + 1);

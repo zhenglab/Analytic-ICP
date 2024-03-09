@@ -3,14 +3,14 @@
 /*!
 *      \file Fitting.h
 *      \brief Fitting
-*	   \author Wei Feng
+*      \author Wei Feng
 *      \date 10/08/2020
 *
 */
 #include "Algo.h"
 
 #define MAXNEWICPITERCOUNT 64
-
+#define MAXMATSIZE (MAXNOMIALSIZE*2)
 
 template<class T>
 void  __declspec(dllexport) GetMatB4Plane(T matB[], T(*point_set)[3], int point_num)
@@ -857,10 +857,10 @@ void  __declspec(dllexport) AffineFittingQR(T param[5], T(&ortMat)[9]
 }
 
 template<class T>
-void  __declspec(dllexport) ADMMFitting(T(*mat_set)[MAXD], int deg
+void  __declspec(dllexport) ADMMFitting(T(*mat_set)[MAXMATSIZE], int deg
 	, T(*point0)[3], T(*point)[3], int point_num, double eps, int jt)
 {
-	typedef T Td[MAXD];
+	typedef T Td[MAXMATSIZE];
 	Td *delta_set = new Td[MAXDEGREE];
 	memset(delta_set, 0, sizeof(Td)*MAXDEGREE);
 	T error,tempE;

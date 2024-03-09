@@ -10,8 +10,6 @@
 #include "Algo.h"
 
 #define MAXNEWICPITERCOUNT 64
-#define MAXMATSIZE (MAXNOMIALSIZE*2)
-
 
 template<class T>
 void  __declspec(dllexport) GetMatB4Plane(T matB[], T(*point_set)[3], int point_num)

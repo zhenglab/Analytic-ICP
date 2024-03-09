@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /*!
 *      \file Algo.h
 *      \brief algorithm
@@ -20,7 +20,8 @@
 #define MAXNOMIALSIZE 64
 #define MAXD 8
 #define MAXDEGREE 16
-typedef double coefmat[MAXD];
+#define MAXMATSIZE (MAXNOMIALSIZE*2)
+typedef double coefmat[MAXMATSIZE];
 typedef double double2[2];
 typedef double double3[3];
 typedef double double4[4];
@@ -901,7 +902,7 @@ void __declspec(dllexport) Power2Trans(T(&linearT)[9], T(&o2)[9], T(&srcObj)[3],
 }
 
 template<class T>
-void __declspec(dllexport) AnalyticTrans3d_1(T(*mat_set)[MAXD]
+void __declspec(dllexport) AnalyticTrans3d_1(T(*mat_set)[MAXMATSIZE]
 	, T(&srcObj)[3], T(&qstObj)[3])
 {
 	typedef T T3[3];
@@ -924,7 +925,7 @@ void __declspec(dllexport) AnalyticTrans3d_1(T(*mat_set)[MAXD]
 
 
 template<class T>
-void __declspec(dllexport) AnalyticTrans3d_2(T(&mat_set)[MAXD]
+void __declspec(dllexport) AnalyticTrans3d_2(T(&mat_set)[MAXMATSIZE]
 	, T(&srcObj)[3], T(&qstObj)[3])
 {
 	typedef T T3[3];
@@ -942,7 +943,7 @@ void __declspec(dllexport) AnalyticTrans3d_2(T(&mat_set)[MAXD]
 
 
 template<class T>
-void __declspec(dllexport) AnalyticTrans(T(*mat_set)[MAXD], int deg
+void __declspec(dllexport) AnalyticTrans(T(*mat_set)[MAXMATSIZE], int deg
 	, T(&srcObj)[3], T(&qstObj)[3])
 {
 	typedef T T2[2];

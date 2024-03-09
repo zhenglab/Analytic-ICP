@@ -12,6 +12,7 @@
 #define MAXNEWICPITERCOUNT 64
 #define MAXMATSIZE (MAXNOMIALSIZE*2)
 
+
 template<class T>
 void  __declspec(dllexport) GetMatB4Plane(T matB[], T(*point_set)[3], int point_num)
 {
@@ -632,7 +633,7 @@ T  __declspec(dllexport) GetDeltaVec4ADMM(T(&delta)[MAXMATSIZE], T(*mat_set)[MAX
 
 
 template<class T>
-T  __declspec(dllexport) GetDeltaVec4Analytic(T(*delta_set)[MAXD], T(*mat_set)[MAXD]
+T  __declspec(dllexport) GetDeltaVec4Analytic(T(*delta_set)[MAXMATSIZE], T(*mat_set)[MAXMATSIZE]
 	, int deg, T(*point0)[3], T(*point)[3], int point_num)
 {
 	int sn = Sn(2, 2, deg + 1);
@@ -886,12 +887,12 @@ void  __declspec(dllexport) ADMMFitting(T(*mat_set)[MAXMATSIZE], int deg
 }
 
 template<class T>
-void  __declspec(dllexport) AnalyticFitting(T(*mat_set)[MAXD], int deg
+void  __declspec(dllexport) AnalyticFitting(T(*mat_set)[MAXMATSIZE], int deg
 	, T(*point0)[3], T(*pointAff)[3], int point_num, double eps, int jt)
 {
-	typedef T Td[MAXD];
-	Td *delta_set = new Td[MAXD];
-	memset(delta_set, 0, sizeof(Td)*MAXD);
+	typedef T Td[MAXMATSIZE];
+	Td *delta_set = new Td[MAXDEGREE];
+	memset(delta_set, 0, sizeof(Td)*MAXDEGREE);
 	for (int i = 0; i != jt; ++i)
 	{
 		T error = GetDeltaVec4Analytic(delta_set, mat_set, deg, point0, pointAff, point_num);
@@ -1116,7 +1117,7 @@ void __declspec(dllexport) GetAffineTransformParamQR(T(&matrix)[9], T(&ortMat)[9
 }
 
 template<class T>
-void __declspec(dllexport) GetAnalyTransParam(T(*mat_set)[MAXD], int deg
+void __declspec(dllexport) GetAnalyTransParam(T(*mat_set)[MAXMATSIZE], int deg
 	, T(*ps0)[3], T(*ps)[3], int num)
 {
 	//ADMMFitting(mat_set, deg, ps0, ps, num, 0.01, 50);
@@ -1359,8 +1360,8 @@ inline double Analytic_ICP_3D(CPoint3 *point_set4regist, int num4regist
 		coef0[1] += tV[1];
 		coef0[2] += tV[2];
 
-		coefmat *mat_set = new coefmat[MAXD];
-		memset(mat_set, 0, sizeof(coefmat)*MAXD);
+		coefmat *mat_set = new coefmat[MAXDEGREE];
+		memset(mat_set, 0, sizeof(coefmat)*MAXDEGREE);
 		mat_set[0][0] = coef0[0];
 		mat_set[0][1] = coef0[1];
 		mat_set[0][2] = coef0[2];
@@ -1603,8 +1604,8 @@ inline double Analytic_ICP_2D(CPoint2 *point_set4regist, int num4regist
 		//memset(matQ, 0, sizeof(double9));
 		dist = 0;
 
-		coefmat *mat_set = new coefmat[MAXD];
-		memset(mat_set, 0, sizeof(coefmat)*MAXD);
+		coefmat *mat_set = new coefmat[MAXDEGREE];
+		memset(mat_set, 0, sizeof(coefmat)*MAXDEGREE);
 		mat_set[0][0] = matrix[2];
 		mat_set[0][1] = matrix[5];
 

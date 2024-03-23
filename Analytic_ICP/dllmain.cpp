@@ -1,4 +1,4 @@
-// dllmain.cpp : ¶¨Òå DLL Ó¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
+// dllmain.cpp : å®šä¹‰ DLL åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
 #include "stdafx.h"
 #include "algorithm\Fitting.h"
 
@@ -18,7 +18,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	return TRUE;
 }
 
-inline double feature_nonrigid_transform(double(*point_set4regist)[2], int num4regist
+inline double feature_nonrigid_regist(double(*point_set4regist)[2], int num4regist
 	, double(*aim_point_set)[2], int aim_num, int iterCount)
 {
 	CPoint2 *ps4regist = new CPoint2[num4regist];
@@ -57,7 +57,7 @@ inline double feature_nonrigid_transform(double(*point_set4regist)[2], int num4r
 	return result;
 }
 
-inline double feature_nonrigid_transf3d(double(*point_set4regist)[3], int num4regist
+inline double feature_nonrigid_regist3d(double(*point_set4regist)[3], int num4regist
 	, double(*aim_point_set)[3], int aim_num, int iterCount, double eps)
 {
 	CPoint3 *ps4regist = new CPoint3[num4regist];
@@ -104,14 +104,14 @@ inline double feature_nonrigid_transf3d(double(*point_set4regist)[3], int num4re
 DLL_ANALYTICICP double feature_transform(double(*point_set4regist)[2], int num4regist
 	, double(*aim_point_set)[2], int aim_num, int iterCount)
 {
-	return feature_nonrigid_transform(point_set4regist, num4regist
+	return feature_nonrigid_regist(point_set4regist, num4regist
 		, aim_point_set, aim_num, iterCount);
 }
 
 DLL_ANALYTICICP double feature_transf3d(double(*point_set4regist)[3], int num4regist
 	, double(*aim_point_set)[3], int aim_num, int iterCount, double eps)
 {
-	return feature_nonrigid_transf3d(point_set4regist, num4regist
+	return feature_nonrigid_regist3d(point_set4regist, num4regist
 		, aim_point_set, aim_num, iterCount, eps);
 }
 

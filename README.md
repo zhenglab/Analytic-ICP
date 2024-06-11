@@ -1,6 +1,6 @@
 # Analytic Measure
 
-**Analytic Iterive Closet Point (Analytic-ICP)** is a point-set registration algorithm, originally developed by Wei Feng et al.
+**Analytic Iterive Closest Point (Analytic-ICP)** is a point-set registration algorithm, originally developed by Wei Feng et al.
 
 This is a C++ solution for visual measurement, which uses Analytic-ICP to register a template to actual measured data for subsequent measurement. It consists of three projects:
 

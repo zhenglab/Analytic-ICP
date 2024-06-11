@@ -8,7 +8,7 @@ It consists of three projects:
  * SmoothAdjustment DLL code
  * Test application code
 
-The SmoothAdjustment dynamic link library constitutes the primary framework of this project. It is designed to perform specific operations on the registered surfaces, including adjustments, measurements, and more. Currently, it relies on Analytic-ICP, but it can also utilize (rely on) other registration algorithms.
+The SmoothAdjustment dynamic link library constitutes the primary framework of this project. It is designed to perform specific operations on the registered surfaces, including visualization, measurements, and more. Currently, it relies on Analytic-ICP, but it can also utilize (rely on) other registration algorithms.
 
 # Prerequisites
  * Visual Studio 2013

@@ -23,6 +23,6 @@ In Analytic-ICP, we utilize the point-to-point ICP code authored by Professor An
 # Datasets
  * SHREC’19
  * 3Dscanrep
- * Other
+ * Others
 
 All the data utilized in our experiment are contained within this package, encompassing both 2D and 3D point clouds.

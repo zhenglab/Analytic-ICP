@@ -11,6 +11,7 @@ This is a C++ solution for surface registration (adjustment), which uses Analyti
 The SmoothAdjustment dynamic link library constitutes the primary framework of this project. It is designed to perform specific operations on the registered surfaces, including adjustments, measurements, and more. Currently, it relies on Analytic-ICP, but it can also utilize (rely on) other registration algorithms.
 
 # Prerequisites
+ * Visual Studio 2013
  * Eigen Library
  * Boost Library
  * Opencv Library

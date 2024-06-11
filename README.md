@@ -1,7 +1,5 @@
 # Smooth Adjustment
 
-**Analytic Iterative Closest Point (Analytic-ICP)** is a point-set registration algorithm, originally developed by Wei Feng et al.
-
 This repository provides the official C++ implementation of our paper "Low-Cost Approximation of Smooth Mapping for Point Set Registration".
 
 It consists of three projects:

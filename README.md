@@ -12,8 +12,8 @@ The SmoothAdjustment dynamic link library constitutes the primary framework of t
 
 # Prerequisites
 -Eigen Library
--Boost Library
--Opencv Library
+*Boost Library
++Opencv Library
 
 This solution can only run on the Windows visual stdio 2013 platform for the time being. At present, we have only implemented 2D and 3D nth-order Analytic-ICP. The EXE generated in the Test project can output the visualization results of the registration and analytic mapping.
 

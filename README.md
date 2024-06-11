@@ -2,7 +2,9 @@
 
 **Analytic Iterive Closest Point (Analytic-ICP)** is a point-set registration algorithm, originally developed by Wei Feng et al.
 
-This is a C++ solution for surface registration (adjustment), which uses Analytic-ICP to register moving feature point set in one surface to fixed feature point set in another surface. It consists of three projects:
+This repository provides the official C++ implementation of our paper "Low-Cost Approximation of Smooth Mapping for Point Set Registration".
+
+It consists of three projects:
 
  * Analytic-ICP DLL code
  * SmoothAdjustment DLL code

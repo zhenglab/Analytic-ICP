@@ -11,9 +11,9 @@ This is a C++ solution for surface registration (adjustment), which uses Analyti
 The SmoothAdjustment dynamic link library constitutes the primary framework of this project. It is designed to perform specific operations on the registered surfaces, including adjustments, measurements, and more. Currently, it relies on Analytic-ICP, but it can also utilize (rely on) other registration algorithms.
 
 # Prerequisites
-*Eigen Library
-*Boost Library
-*Opencv Library
+ * Eigen Library
+ * Boost Library
+ * Opencv Library
 
 This solution can only run on the Windows visual stdio 2013 platform for the time being. At present, we have only implemented 2D and 3D nth-order Analytic-ICP. The EXE generated in the Test project can output the visualization results of the registration and analytic mapping.
 

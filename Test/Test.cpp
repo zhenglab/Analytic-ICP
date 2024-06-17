@@ -1,4 +1,4 @@
-// test.cpp : ∂®“Âøÿ÷∆Ã®”¶”√≥Ã–Úµƒ»Îø⁄µ„°£
+// test.cpp : ÂÆö‰πâÊéßÂà∂Âè∞Â∫îÁî®Á®ãÂ∫èÁöÑÂÖ•Âè£ÁÇπ„ÄÇ
 //
 
 #include "stdafx.h"
@@ -39,6 +39,60 @@ int main()
 	ma_analytic_map analytic_map = (ma_analytic_map)GetProcAddress(hDll, "analytic_3d_map");
 	ma_release release = (ma_release)GetProcAddress(hDll, "laser_release");
 
+	int registType = 0;
+	int addPerturb = 0;
+	char buf[MAX_PATH] = { 0 };
+	char movingPsPath[MAX_PATH] = { 0 };
+	char fixedPsPath[MAX_PATH] = { 0 };
+	char outputPerturbImgPath[MAX_PATH] = { 0 };
+	char outputEffectImgPath[MAX_PATH] = { 0 };
+
+	int len = GetPrivateProfileStringA("Param",
+		"RegistType",
+		"0",
+		buf,
+		MAX_PATH,
+		".\\experiment.ini");
+
+	registType = atoi(buf);
+
+	len = GetPrivateProfileStringA("Param",
+		"AddPerturb",
+		"0",
+		buf,
+		MAX_PATH,
+		".\\experiment.ini");
+
+	addPerturb = atoi(buf);
+
+	len = GetPrivateProfileStringA("Param",
+		"MovingPsPath",
+		"",
+		movingPsPath,
+		MAX_PATH,
+		".\\experiment.ini");
+
+	len = GetPrivateProfileStringA("Param",
+		"FixedPsPath",
+		"",
+		fixedPsPath,
+		MAX_PATH,
+		".\\experiment.ini");
+
+	len = GetPrivateProfileStringA("Param",
+		"OutputPerturbImgPath",
+		"",
+		outputPerturbImgPath,
+		MAX_PATH,
+		".\\experiment.ini");
+
+	len = GetPrivateProfileStringA("Param",
+		"OutputEffectImgPath",
+		"",
+		outputEffectImgPath,
+		MAX_PATH,
+		".\\experiment.ini");
+
 	initialize(_T("Analytic_ICP.dll"));
 
 	printf("Non-rigid registration with analytic mapping begin------------\n");
@@ -46,28 +100,37 @@ int main()
 	Mat mat;
 	mat.create(2048, 2048, CV_8UC3);
 
-	//3D
-	analytic_map("F:\\bunny test\\bunny_3500.csv"
-		, mat.data, mat.rows, mat.cols);
-	imwrite("F:\\analymap.bmp", mat);
+	if (1 == registType)
+	{
+		if (addPerturb)
+		{
+			analytic_map(movingPsPath
+				, mat.data, mat.rows, mat.cols);
+			imwrite(outputPerturbImgPath, mat);
+		}
 
-	//3D
-	double result = ps_regist("F:\\fixed3d.csv"
-		, "F:\\bunny test\\bunny_3500.csv"
-		, mat.data, mat.rows, mat.cols);
-	imwrite("F:\\ps_regist_test.bmp", mat);
+		//3D
+		double result = ps_regist(fixedPsPath
+			, movingPsPath
+			, mat.data, mat.rows, mat.cols);
+		imwrite(outputEffectImgPath, mat);
+	}
+	else
+	{
+		//2D
+		if (addPerturb)
+		{
+			analytic_map(movingPsPath
+				, mat.data, mat.rows, mat.cols);
+			imwrite(outputPerturbImgPath, mat);
+		}
 
-
-	////2D
-	//analytic_map("F:\\fixtures\\fish.csv"
-	//	, mat.data, mat.rows, mat.cols);
-	//imwrite("F:\\analymap.bmp", mat);
-
-	////2D
-	//double result = ps_regist("C:\\Users\\Administrator\\Desktop\\2ddeformandresidual\\0.06\\fixed_2.csv"
-	//	, "F:\\fixtures\\fish.csv"
-	//	, mat.data, mat.rows, mat.cols);
-	//imwrite("F:\\ps_regist_test.bmp", mat);
+		//2D
+		double result = ps_regist(fixedPsPath
+			, movingPsPath
+			, mat.data, mat.rows, mat.cols);
+		imwrite(outputEffectImgPath, mat);
+	}
 
 	release();
 	system("pause");

@@ -29,5 +29,6 @@ All the data utilized in our experiment are contained within this package, encom
 
 # Quick Example
  * Download the Release directory
- * Edit experiment.ini
- * Run Test.exe
+ * Download the opencv_world300.dll and place it within the Release folder
+ * Edit the experiment.ini
+ * Run the Test.exe

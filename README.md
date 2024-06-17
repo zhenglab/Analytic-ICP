@@ -26,3 +26,8 @@ In Analytic-ICP, we utilize the point-to-point ICP code authored by Professor An
  * Others
 
 All the data utilized in our experiment are contained within this package, encompassing both 2D and 3D point clouds.
+
+# Quick Example
+ * Download the Release directory
+ * Edit experiment.ini
+ * Run Test.exe

@@ -1,6 +1,6 @@
 # Smooth Adjustment
 
-This repository provides the official C++ implementation of our paper "Low-Cost Approximation of Smooth Mapping for Point Set Registration".
+This repository provides the official C++ implementation of our paper "Structured Analytic Mappings for Point Set Registration".
 
 It consists of three projects:
 

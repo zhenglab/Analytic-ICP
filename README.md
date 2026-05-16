@@ -1,10 +1,12 @@
-# Structured Analytic Mappings for Point Set Registration
+# Analytic-ICP
 
-This repository provides a C++ research prototype implementation of the paper:
+This repository provides a C++ research prototype implementation of **Analytic-ICP**, the hard-correspondence registration algorithm introduced in the paper:
 
 **"Structured Analytic Mappings for Point Set Registration"**
 
-The main registration algorithm implemented in this repository is referred to as **Analytic-ICP**. It embeds **Structured Analytic Mappings (SAM)** into an ICP-style hard-correspondence point set registration loop.
+The paper has been accepted for publication in **SIAM Journal on Imaging Sciences (SIIMS)** and is currently in production.
+
+Analytic-ICP embeds **Structured Analytic Mappings (SAM)** into an ICP-style point set registration loop. SAM represents smooth deformations in a finite-dimensional analytic function space constructed from truncated multivariate Taylor expansions of vector-valued functions.
 
 The current release focuses on the core algorithmic pipeline and selected reproducibility examples. It is intended as a research prototype accompanying the paper, not as a fully optimized general-purpose registration library.
 

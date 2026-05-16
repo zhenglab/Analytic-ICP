@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: "Structured Analytic Mappings for Point Set Registration"
+message: "If you use this code, please cite the associated paper."
+authors:
+  - family-names: Feng
+    given-names: Wei
+  - family-names: Wei
+    given-names: Tengda
+  - family-names: Zheng
+    given-names: Haiyong
+version: 0.1.0
+date-released: 2026-05-16
+url: "https://github.com/monge-ampere/Structured-Analytic-Mappings"
+doi: "10.48550/arXiv.2602.16753"
+preferred-citation:
+  type: article
+  title: "Structured Analytic Mappings for Point Set Registration"
+  authors:
+    - family-names: Feng
+      given-names: Wei
+    - family-names: Wei
+      given-names: Tengda
+    - family-names: Zheng
+      given-names: Haiyong
+  year: 2026
+  journal: "arXiv preprint arXiv:2602.16753"
+  doi: "10.48550/arXiv.2602.16753"
+  url: "https://arxiv.org/abs/2602.16753"

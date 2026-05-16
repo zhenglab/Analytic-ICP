@@ -261,10 +261,11 @@ If you use this code or the Structured Analytic Mapping deformation model, pleas
 ```bibtex
 @article{feng2026structuredanalyticmappings,
   title={Structured Analytic Mappings for Point Set Registration},
-  author={Feng, Wei and Zheng, Haiyong},
-  journal={SIAM Journal on Imaging Sciences},
+  author={Feng, Wei and Wei, Tengda and Zheng, Haiyong},
+  journal={arXiv preprint arXiv:2602.16753},
   year={2026},
-  note={Accepted}
+  doi={10.48550/arXiv.2602.16753},
+  note={Accepted for publication in SIAM Journal on Imaging Sciences}
 }
 ```
 

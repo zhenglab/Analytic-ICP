@@ -4,8 +4,6 @@ This repository provides a C++ research prototype implementation of **Analytic-I
 
 **"Structured Analytic Mappings for Point Set Registration"**
 
-The paper has been accepted for publication in **SIAM Journal on Imaging Sciences (SIIMS)** and is currently in production.
-
 Analytic-ICP embeds **Structured Analytic Mappings (SAM)** into an ICP-style point set registration loop. SAM represents smooth deformations in a finite-dimensional analytic function space constructed from truncated multivariate Taylor expansions of vector-valued functions.
 
 The current release focuses on the core algorithmic pipeline and selected reproducibility examples. It is intended as a research prototype accompanying the paper, not as a fully optimized general-purpose registration library.
@@ -266,8 +264,7 @@ If you use this code or the Structured Analytic Mapping deformation model, pleas
   author={Feng, Wei and Wei, Tengda and Zheng, Haiyong},
   journal={arXiv preprint arXiv:2602.16753},
   year={2026},
-  doi={10.48550/arXiv.2602.16753},
-  note={Accepted for publication in SIAM Journal on Imaging Sciences}
+  doi={10.48550/arXiv.2602.16753}
 }
 ```
 

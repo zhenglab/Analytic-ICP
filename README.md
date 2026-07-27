@@ -6,7 +6,7 @@
 
 This repository provides the C++ research prototype accompanying:
 
-> Wei Feng, Tengda Wei, and Haiyong Zheng, **Structured Analytic Mappings for Point Set Registration**, *SIAM Journal on Imaging Sciences*, 19 (2026), pp. 1655â€“1697.
+> Wei Feng, Tengda Wei, and Haiyong Zheng, **Structured Analytic Mappings for Point Set Registration**, *SIAM Journal on Imaging Sciences*, 19 (2026), pp. 1655–1697.
 > <https://doi.org/10.1137/25M1752080>
 
 **Analytic-ICP** is the hard-correspondence point-set registration algorithm developed in the paper. It embeds **Structured Analytic Mappings (SAM)** into an ICP-style outer loop. SAM represents smooth deformations in a finite-dimensional analytic function space constructed from truncated multivariate Taylor expansions of vector-valued functions.
@@ -45,8 +45,8 @@ The runtime architecture is:
 
 ```text
 Test.exe
-  â””â”€ loads SmoothAdjustment.dll
-       â””â”€ loads Analytic_ICP.dll
+  └─ loads SmoothAdjustment.dll
+       └─ loads Analytic_ICP.dll
 ```
 
 `Test.exe` resolves the wrapper functions dynamically with `GetProcAddress`; `SmoothAdjustment.dll` similarly resolves the core registration and deformation functions from `Analytic_ICP.dll`.

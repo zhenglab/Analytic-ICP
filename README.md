@@ -1,93 +1,123 @@
 # Analytic-ICP
 
-This repository provides a C++ research prototype implementation of **Analytic-ICP**, the hard-correspondence registration algorithm introduced in the paper:
+[Published paper](https://doi.org/10.1137/25M1752080) |
+[arXiv preprint](https://arxiv.org/abs/2602.16753) |
+[Analytic-CPD](https://github.com/monge-ampere/Analytic-CPD)
 
-**"Structured Analytic Mappings for Point Set Registration"**
+This repository provides the C++ research prototype accompanying:
 
-Analytic-ICP embeds **Structured Analytic Mappings (SAM)** into an ICP-style point set registration loop. SAM represents smooth deformations in a finite-dimensional analytic function space constructed from truncated multivariate Taylor expansions of vector-valued functions.
+> Wei Feng, Tengda Wei, and Haiyong Zheng, **Structured Analytic Mappings for Point Set Registration**, *SIAM Journal on Imaging Sciences*, 19 (2026), pp. 1655â€“1697.
+> <https://doi.org/10.1137/25M1752080>
 
-The current release focuses on the core algorithmic pipeline and selected reproducibility examples. It is intended as a research prototype accompanying the paper, not as a fully optimized general-purpose registration library.
+**Analytic-ICP** is the hard-correspondence point-set registration algorithm developed in the paper. It embeds **Structured Analytic Mappings (SAM)** into an ICP-style outer loop. SAM represents smooth deformations in a finite-dimensional analytic function space constructed from truncated multivariate Taylor expansions of vector-valued functions.
 
----
+The repository contains the core 2D/3D implementation, a file-based DLL wrapper, a Windows console frontend, selected point sets, and one configured 3D example. It is a research prototype and source snapshot associated with the journal article, not a production registration library or a one-command reproduction package for every experiment in the paper.
 
-## Overview
+## Method in Brief
 
-Structured Analytic Mappings (SAM) represent smooth point-set deformations by truncated multivariate Taylor mappings of vector-valued functions. Instead of using a point-indexed displacement field, SAM organizes deformation estimation in a finite-dimensional analytic function space whose coefficient dimension is controlled by the ambient dimension and analytic order.
+Analytic-ICP alternates between nearest-neighbor correspondence estimation and structured analytic mapping estimation:
 
-In the Analytic-ICP implementation, the registration process follows an ICP-style hard-correspondence framework:
+1. establish hard nearest-neighbor correspondences between the current moving set and the fixed set;
+2. estimate a structured analytic map for the corresponding point pairs;
+3. transform the moving set;
+4. repeat until the internal stopping condition is reached.
 
-1. Estimate nearest-neighbor correspondences between the current moving point set and the fixed point set;
-2. Fit a structured analytic mapping to the corresponding point pairs;
-3. Update the moving point set by applying the estimated analytic map;
-4. Repeat until convergence or until the maximum number of iterations is reached.
+The mapping is estimated through staged rigid, affine, and nonlinear analytic fitting. Its coefficient dimension is controlled by the ambient dimension and analytic order rather than by the number of input points.
 
-This framework provides a compact and interpretable deformation representation for smooth non-rigid point set registration.
+The current hard-correspondence implementation is intended primarily for small and smooth non-rigid deformations. As discussed in the paper, large or nonlocal displacements can cause nearest-neighbor correspondence failures even when the analytic deformation model is sufficiently expressive. The related [Analytic-CPD](https://github.com/monge-ampere/Analytic-CPD) project combines SAM with soft posterior correspondences.
 
----
+## Repository Layout
 
-## Project Structure
+| Path | Purpose |
+|---|---|
+| `Analytic_ICP/` | Core 2D/3D Analytic-ICP fitting and synthetic analytic deformation functions |
+| `SmoothAdjustment/` | File-level DLL wrapper around `Analytic_ICP.dll` |
+| `Test/` | Console frontend, `experiment.ini`, one selected 3D example, and example outputs |
+| `Data/` | Point sets retained from the research code; provenance review is still in progress |
+| `SmoothAdjustment.sln` | Visual Studio solution containing all three projects |
+| `CITATION.cff` | Machine-readable citation metadata for the published article |
+| `API.md` | Exported DLL interfaces and call sequence |
+| `REPRODUCIBILITY.md` | Build and selected-example reproducibility notes |
+| `DATASETS.md` | Inventory and current provenance status of included data |
+| `THIRD_PARTY_NOTICES.md` | Third-party source and licensing notices |
 
-The current Visual Studio implementation follows a three-layer architecture:
-
-- **`Analytic_ICP.dll`**  
-  Core Analytic-ICP algorithm. It implements structured analytic mapping based 2D/3D registration and synthetic analytic deformation generation.
-
-- **`SmoothAdjustment.dll`**  
-  A lightweight file-level wrapper. It loads `Analytic_ICP.dll`, reads point sets from CSV files, invokes the 2D/3D registration interfaces, optionally generates analytic perturbations, and writes transformed point sets to CSV.
-
-- **`Test.exe`**  
-  A console frontend. It reads `experiment.ini`, initializes the DLLs, runs 2D or 3D registration, and writes output files.
-
-A typical runtime directory should contain:
+The runtime architecture is:
 
 ```text
 Test.exe
-SmoothAdjustment.dll
-Analytic_ICP.dll
-experiment.ini
+  â””â”€ loads SmoothAdjustment.dll
+       â””â”€ loads Analytic_ICP.dll
 ```
----
 
-## Build Environment
+`Test.exe` resolves the wrapper functions dynamically with `GetProcAddress`; `SmoothAdjustment.dll` similarly resolves the core registration and deformation functions from `Analytic_ICP.dll`.
 
-The current implementation is a Windows / Visual Studio research prototype.
+## Build Requirements
 
-Tested environment:
+The checked-in project files describe the following legacy Windows environment:
 
-- **Operating system:** Windows
-- **Compiler/IDE:** Microsoft Visual Studio
-- **Build mode:** 64-bit Release build recommended
-- **Dependencies:**
-  - Eigen for matrix and vector computation
-  - Boost for KD-tree based nearest-neighbor search
-  - OpenCV for optional visualization and image output in the test/frontend modules
+| Component | Version or configuration encoded in the project |
+|---|---|
+| Operating system | Windows |
+| Visual Studio solution | Visual Studio 14 / Visual Studio 2015 |
+| Platform toolset | `v140` |
+| Recommended configuration | `Release | x64` |
+| Eigen | 3.3.8 path encoded |
+| Boost | 1.60.0 path encoded |
+| OpenCV | 3.4.16 libraries encoded as `opencv_world3416.lib` |
 
-Linux, macOS, and CMake support are not yet provided in the current release.
+These values are read directly from the current `.sln` and `.vcxproj` files; a clean-machine build has not yet been revalidated for this publication snapshot.
 
----
+> **Important:** the three `.vcxproj` files currently contain machine-specific absolute paths under `E:\ScientificComputingPackage\...`. Before building, replace those include and library paths with locations valid on your machine.
 
-## Implementation Notes
+Although the analytic fitting code itself is based mainly on C++ and Eigen, the current projects include and/or link OpenCV. OpenCV is therefore a configured build dependency, not yet an optional dependency; release binaries may also require the matching OpenCV DLL when imports are retained. Boost is used by the KD-tree nearest-neighbor implementation.
 
-The ICP component is adapted from the public point-to-point ICP implementation by Andreas Geiger (2011). In this repository, the original code has been reorganized and converted into an Eigen-based implementation so that ICP-style nearest-neighbor registration and structured analytic mapping fitting can be evaluated within a consistent C++ numerical framework.
+Linux, macOS, CMake, and package-manager-based dependency setup are not provided in this snapshot.
 
-The nearest-neighbor component depends on Boost KD-tree functionality. Eigen is used for matrix and vector operations in the analytic fitting and registration modules. OpenCV is used mainly by the test and wrapper components for optional visualization and image output; the core analytic fitting logic itself is based on C++ and Eigen.
+## Quick Start
 
-The implementation is single-threaded unless otherwise noted.
+1. Clone the repository and open `SmoothAdjustment.sln`.
 
----
+2. Update the Eigen, Boost, and OpenCV paths in the three `.vcxproj` files, or configure equivalent Visual Studio property sheets locally.
 
-## Configuration File
+3. Select `Release | x64` and build:
 
-The program uses `experiment.ini` to control the experiment mode, input paths, and output paths.
+   ```text
+   Analytic_ICP
+   SmoothAdjustment
+   Test
+   ```
 
-A typical configuration is:
+4. Place the following files in one runtime directory:
+
+   ```text
+   Test.exe
+   SmoothAdjustment.dll
+   Analytic_ICP.dll
+   experiment.ini
+   ```
+
+   If OpenCV is dynamically linked, ensure that `opencv_world3416.dll` is also in the runtime directory or available through `PATH`.
+
+5. Use `Test/` as the working directory, or copy its `experiment.ini`, `examples/`, and `results/` layout to the runtime directory.
+
+6. Run:
+
+   ```text
+   Test.exe
+   ```
+
+The selected example writes the registered moving point set to the path specified by `MovedOutputPath`. Additional build and verification details are provided in [REPRODUCIBILITY.md](REPRODUCIBILITY.md).
+
+## Configuration
+
+`Test.exe` reads `.\experiment.ini`. The checked-in configuration is:
 
 ```ini
 [Param]
 ; 0: 2D registration, 1: 3D registration
 RegistType=1
 
-; 1: generate analytic perturbation before registration, 0: direct registration
+; 1: also generate a synthetic analytic deformation, 0: do not generate it
 AddPerturb=1
 
 ; input point sets
@@ -103,195 +133,134 @@ PerturbDeg2D=8
 PerturbDeg3D=2
 ```
 
----
-
-## Parameter Description
-
-| Parameter | Description |
+| Parameter | Current frontend behavior |
 |---|---|
-| `RegistType` | `0` for 2D registration, `1` for 3D registration |
-| `AddPerturb` | Whether to generate a synthetic analytic deformation before registration |
-| `MovingPsPath` | Path to the moving/source point set |
-| `FixedPsPath` | Path to the fixed/target point set |
-| `PerturbedOutputPath` | Output path for the synthetically deformed point set |
-| `MovedOutputPath` | Output path for the registered moving point set |
-| `PerturbDeg2D` | Analytic degree for synthetic 2D deformation generation |
-| `PerturbDeg3D` | Analytic degree for synthetic 3D deformation generation |
+| `RegistType` | `0` selects the 2D wrapper and `1` selects the 3D wrapper |
+| `AddPerturb` | Generates an additional synthetic deformation file when set to `1` |
+| `MovingPsPath` | Moving/source point set passed to registration |
+| `FixedPsPath` | Fixed/target point set passed to registration |
+| `PerturbedOutputPath` | Destination of the synthetic analytic deformation |
+| `MovedOutputPath` | Destination of the registered moving point set |
+| `PerturbDeg2D` | Degree supplied to the 2D synthetic deformation function |
+| `PerturbDeg3D` | Degree supplied to the 3D synthetic deformation function |
 
----
+### Current `AddPerturb` Behavior
 
-## Quick Start
+In the checked-in frontend, `AddPerturb=1` creates `PerturbedOutputPath`, but the registration call in the same run still reads `MovingPsPath`. The generated perturbation file is not automatically substituted as the registration input.
 
-1. Open the Visual Studio solution.
+To register a generated perturbation without changing the code, first generate it, then run the program again with `MovingPsPath` set to that output file. This documents the current implementation; whether the single-run behavior should be changed will be decided separately from this documentation update.
 
-2. Build the following projects in **Release x64** mode:
+The synthetic deformation functions seed their random-number generator from the current time, so perturbation output is expected to vary between runs.
 
-   ```text
-   Analytic_ICP.dll
-   SmoothAdjustment.dll
-   Test.exe
-   ```
+## Point-Set File Format
 
-3. Place the following files in the same runtime directory:
+Input files contain one point per row and no header. The current parser accepts comma-separated or whitespace-separated numeric coordinates.
 
-   ```text
-   Test.exe
-   SmoothAdjustment.dll
-   Analytic_ICP.dll
-   experiment.ini
-   ```
-
-4. Edit `experiment.ini` to specify the fixed point set, moving point set, and output paths.
-
-5. Run:
-
-   ```bash
-   Test.exe
-   ```
-
-After execution, the registered moving point set will be written to the path specified by `MovedOutputPath`.
-
-If `AddPerturb=1`, the synthetically deformed point set will also be written to `PerturbedOutputPath`.
-
----
-
-## Input Data Format
-
-Input point sets are stored as CSV files without headers.
-
-For 2D point sets:
+2D examples:
 
 ```text
 x,y
 x,y
-...
 ```
 
-For 3D point sets:
+or
+
+```text
+x y
+x y
+```
+
+3D examples:
 
 ```text
 x,y,z
 x,y,z
-...
 ```
 
-Each row corresponds to one point.
+The output writer uses comma-separated coordinates. The registered output preserves the moving-set row order.
 
-For pointwise error evaluation, the fixed and moving point sets should contain the same number of points and follow the same point ordering. For general registration without known pointwise correspondence, the output registered point set can still be visually inspected or evaluated using nearest-neighbor based metrics.
+Known pointwise correspondence is not required by the nearest-neighbor registration loop. Equal point counts and matching row order are needed only when evaluating pointwise errors against known correspondences.
 
----
+## Outputs
 
-## Output Files
-
-The program can produce the registered moving point set:
+The checked-in example configuration uses:
 
 ```text
-results/moved3d.csv
+Test/results/moved3d.csv
+Test/results/perturbed3d.csv
 ```
 
-or the path specified by `MovedOutputPath`.
+`moved3d.csv` is the registered version of `MovingPsPath`. When `AddPerturb=1`, `perturbed3d.csv` is also generated, subject to the behavior described above.
 
-When `AddPerturb=1`, the program can also produce the synthetically deformed point set:
+The console prints the scalar value returned by the registration function as `Final error`. This prototype does not yet emit a structured experiment log containing all parameters, timing, and evaluation metrics.
 
-```text
-results/perturbed3d.csv
-```
+## Reproducibility Scope
 
-or the path specified by `PerturbedOutputPath`.
+The repository currently provides:
 
-Optional visualization files may be generated by visualization-enabled modules when OpenCV output is enabled.
+- the Windows C++ research implementation;
+- 2D and 3D registration entry points;
+- synthetic analytic deformation entry points;
+- one configured 3D example with stored outputs;
+- additional research point sets under `Data/`.
 
----
+It does not yet provide:
 
-## Runtime Notes
+- a portable dependency configuration;
+- an automated clean-machine build;
+- scripts reproducing every table and figure in the paper;
+- automated numerical regression tests;
+- completed provenance and redistribution records for every included point set.
 
-Unless otherwise noted in the paper, experiments were run on a standard laptop with an Intel i5-6200U CPU and 8 GB RAM. The implementation is single-threaded C++ using Eigen, Boost, and OpenCV.
+See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for the precise status and [DATASETS.md](DATASETS.md) before redistributing any data.
 
-Wall-clock times reported in the paper should be compared within the same experimental subsection. Some experiments may have been executed on different hardware, which is explicitly indicated in the corresponding captions or subsections of the paper.
+## Runtime and Performance Notes
 
----
+The implementation is single-threaded unless otherwise noted. The paper reports experiments conducted on the hardware stated in the corresponding experimental subsections and captions. Wall-clock values should be compared within the same experimental setting rather than across different machines or separately described hardware.
 
-## Current Status
-
-This repository is currently a research prototype accompanying the paper.
-
-Current characteristics:
-
-- C++ implementation
-- Windows / Visual Studio project
-- Single-threaded core implementation
-- Eigen-based matrix and vector computation
-- Boost-based KD-tree nearest-neighbor search
-- OpenCV-enabled optional visualization frontend
-- 2D and 3D Analytic-ICP registration support
-- Synthetic analytic deformation generation for selected examples
-
-The code is being organized for reproducibility. Additional examples, scripts, and documentation will be added progressively.
-
----
-
-## Datasets
-
-The paper uses public point-set and point-cloud datasets as well as generated deformation examples.
-
-Due to dataset license restrictions, third-party datasets should be downloaded from their original sources when necessary. This repository provides selected example files and configuration templates for demonstrating the core algorithm.
-
-Please follow the licenses and citation requirements of the original datasets.
-
----
-
-## Relationship to Analytic-CPD
-
-This repository implements the Structured Analytic Mapping framework and its hard-correspondence instantiation, Analytic-ICP.
-
-A related follow-up project, Analytic-CPD, integrates Structured Analytic Mappings into the probabilistic posterior correspondence framework of Coherent Point Drift (CPD). In contrast to Analytic-ICP, which relies on nearest-neighbor hard correspondences, Analytic-CPD uses CPD-style soft posterior correspondences and formulates the M-step as posterior-weighted structured analytic mapping estimation.
-
-Analytic-CPD repository:
-
-```text
-https://github.com/monge-ampere/Analytic-CPD
-```
-
----
+The legacy prototype was also run on a laptop with an Intel i5-6200U CPU and 8 GB RAM. This machine description is retained as implementation history, not as a guarantee that all paper experiments used that hardware.
 
 ## Citation
 
-If you use this code or the Structured Analytic Mapping deformation model, please cite the associated paper:
+If you use this code or the Structured Analytic Mapping deformation model, cite the published article:
 
 ```bibtex
 @article{feng2026structuredanalyticmappings,
-  title={Structured Analytic Mappings for Point Set Registration},
-  author={Feng, Wei and Wei, Tengda and Zheng, Haiyong},
-  journal={arXiv preprint arXiv:2602.16753},
-  year={2026},
-  doi={10.48550/arXiv.2602.16753}
+  author  = {Feng, Wei and Wei, Tengda and Zheng, Haiyong},
+  title   = {Structured Analytic Mappings for Point Set Registration},
+  journal = {SIAM Journal on Imaging Sciences},
+  volume  = {19},
+  number  = {3},
+  pages   = {1655--1697},
+  year    = {2026},
+  doi     = {10.1137/25M1752080},
+  url     = {https://doi.org/10.1137/25M1752080}
 }
 ```
 
-If you use the Analytic-CPD extension, please also cite:
+GitHub's citation interface reads the same journal metadata from [`CITATION.cff`](CITATION.cff). The [arXiv version](https://arxiv.org/abs/2602.16753) remains available as a preprint.
+
+If you use the soft-correspondence extension, also cite its associated preprint:
 
 ```bibtex
 @article{feng2026structuredanalyticcpd,
-  title={Structured Analytic Coherent Point Drift for Non-Rigid Point Set Registration},
-  author={Feng, Wei and Zheng, Haiyong},
-  journal={arXiv preprint arXiv:2605.00934},
-  year={2026},
-  doi={10.48550/arXiv.2605.00934}
+  author  = {Feng, Wei and Zheng, Haiyong},
+  title   = {Structured Analytic Coherent Point Drift for Non-Rigid Point Set Registration},
+  journal = {arXiv preprint arXiv:2605.00934},
+  year    = {2026},
+  doi     = {10.48550/arXiv.2605.00934},
+  url     = {https://arxiv.org/abs/2605.00934}
 }
 ```
 
----
+## Licensing and Third-Party Code
 
-## License
+No project-wide license has yet been declared for the original Analytic-ICP code.
 
-A formal open-source license will be added after the third-party dependency and code status is fully clarified.
+The repository also contains adapted third-party ICP and KD-tree source with pre-existing license notices. In particular, the libicp-derived files state **GNU GPL version 2 or later**, while the KD-tree files refer to the **Academic Free License version 1.1** and additional provisions in a license file that is not currently present in this repository.
 
-Until then, please treat this repository as a research prototype made publicly available for academic reference. For redistribution, commercial use, or integration into other projects, please contact the authors and review all third-party code notices carefully.
-
-The ICP component is adapted from the public point-to-point ICP implementation by Andreas Geiger (2011). Please review and respect the license terms of the original implementation and all third-party dependencies.
-
----
+Before reuse or redistribution, read [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Public source availability should not be interpreted as permission to redistribute the entire repository under an arbitrary license.
 
 ## Contact
 
-For questions, comments, or collaboration related to Structured Analytic Mappings, Analytic-ICP, point set registration, or geometric deformation modeling, please contact the author through GitHub.
+Questions, reproducibility reports, and research collaborations related to Structured Analytic Mappings, Analytic-ICP, point-set registration, or geometric deformation modeling are welcome through this repository's GitHub issue tracker.

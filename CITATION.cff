@@ -1,6 +1,7 @@
 cff-version: 1.2.0
-title: "Structured Analytic Mappings for Point Set Registration"
-message: "If you use this code, please cite the associated paper."
+title: "Analytic-ICP"
+message: "If you use this software or the Structured Analytic Mapping deformation model, please cite the published SIAM Journal on Imaging Sciences article."
+type: software
 authors:
   - family-names: Feng
     given-names: Wei
@@ -10,8 +11,14 @@ authors:
     given-names: Haiyong
 version: 0.1.0
 date-released: 2026-05-16
-url: "https://github.com/monge-ampere/Structured-Analytic-Mappings"
-doi: "10.48550/arXiv.2602.16753"
+repository-code: "https://github.com/zhenglab/Analytic-ICP"
+url: "https://github.com/zhenglab/Analytic-ICP"
+keywords:
+  - point-set registration
+  - non-rigid registration
+  - iterative closest point
+  - structured analytic mappings
+  - multivariate Taylor expansion
 preferred-citation:
   type: article
   title: "Structured Analytic Mappings for Point Set Registration"
@@ -23,6 +30,10 @@ preferred-citation:
     - family-names: Zheng
       given-names: Haiyong
   year: 2026
-  journal: "arXiv preprint arXiv:2602.16753"
-  doi: "10.48550/arXiv.2602.16753"
-  url: "https://arxiv.org/abs/2602.16753"
+  journal: "SIAM Journal on Imaging Sciences"
+  volume: 19
+  issue: 3
+  start: 1655
+  end: 1697
+  doi: "10.1137/25M1752080"
+  url: "https://doi.org/10.1137/25M1752080"
